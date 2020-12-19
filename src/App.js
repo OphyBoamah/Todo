@@ -31,7 +31,11 @@ function App() {
   
   const [complete, setComplete] = useState('');
   const [availableTasks, setAvailableTasks] = useState(todos);
-  const [toggleTodo, setToggleTodo] = useState(false)
+  const [toggleTodo, setToggleTodo] = useState(false);
+  const [inputValue, setInputValue] = useState({
+    id: '',
+    task:''
+  })
 
   const clickComplete = (done) => {
     setComplete(done);
@@ -49,6 +53,18 @@ function App() {
     setToggleTodo(false)
   }
 
+  const addTask = (event) => {
+    event.preventDefault();
+    const newTask = {
+      id: Math.random() * 10,
+      task: inputValue.task,
+    }
+    setAvailableTasks([...availableTasks, newTask])
+    setInputValue({
+    id: '',
+    task:''
+  })
+  }
   return (
     <Box>
       {toggleTodo && (<Box w="70%" bg="gray.100" py={20} mt={10} mx="auto">
@@ -58,9 +74,11 @@ function App() {
       </Heading>
       <Flex align="center" justify="space-between" w="55%"mx="auto" mt={6}>
       <FormControl >
-      <Input type="text" placeholder="Enter a todo..." size="lg" border="2px solid #000" bg="#fff"/>
+            <Input type="text" placeholder="Enter a todo..." size="lg" border="2px solid #000" bg="#fff" name='task' value={inputValue.task} onChange={(event) => {
+              setInputValue({ ...inputValue, task: event.target.value })
+            }}/>
       </FormControl>
-      <Box bg="green.400" color="#fff" py={2} px={4} ml={4} rounded="md">Add</Box>
+      <Box bg="green.400" color="#fff" py={2} px={4} ml={4} rounded="md" onClick={addTask} cursor="pointer">Add</Box>
       </Flex>
       <Box mt={10}>
         {availableTasks.map((todo)=>(
