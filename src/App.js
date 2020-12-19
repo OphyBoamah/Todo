@@ -1,5 +1,5 @@
 import './App.css';
-import { Box, Container, Flex, Heading, Input, FormControl} from '@chakra-ui/react';
+import { Box, Container, Flex, Heading, Input, FormControl, Button, Text} from '@chakra-ui/react';
 import Todotasks from './Todotasks';
 import {useState} from 'react'
 
@@ -31,6 +31,7 @@ function App() {
   
   const [complete, setComplete] = useState('');
   const [availableTasks, setAvailableTasks] = useState(todos);
+  const [toggleTodo, setToggleTodo] = useState(false)
 
   const clickComplete = (done) => {
     setComplete(done);
@@ -41,14 +42,23 @@ function App() {
     setAvailableTasks(todoTasks); 
   }
 
+  const showTodo = () => {
+    setToggleTodo(true)
+  }
+  const hideTodo = () => {
+    setToggleTodo(false)
+  }
+
   return (
-    <Container maxW='6xl' py={20}>
+    <Box>
+      {toggleTodo && (<Box w="70%" bg="gray.100" py={20} mt={10} mx="auto">
+        <Flex align="center" justify="center" bg="#fff" w={8} h={8} position="absolute" top={2} right={64} zIndex={10} fontWeight={800} rounded='sm' onClick={hideTodo} cursor="pointer" >X</Flex>
       <Heading as="h1" fontSize="4xl" textAlign="center">
         My Todo List
       </Heading>
       <Flex align="center" justify="space-between" w="55%"mx="auto" mt={6}>
       <FormControl >
-      <Input type="text" placeholder="Enter a todo..." size="lg" border="2px solid #000"/>
+      <Input type="text" placeholder="Enter a todo..." size="lg" border="2px solid #000" bg="#fff"/>
       </FormControl>
       <Box bg="green.400" color="#fff" py={2} px={4} ml={4} rounded="md">Add</Box>
       </Flex>
@@ -57,7 +67,15 @@ function App() {
           <Todotasks todo={todo} complete={complete.id === todo.id} clicked={()=>clickComplete(todo)} deleteTask={()=>deleteTask(todo.id)} />
         ))}
       </Box>
-    </Container>
+    </Box>)}
+      <Flex align="center" justify="center" mt={70} flexDir="column" textAlign="center" >
+        <Heading as="h4" fontStyle="md" mb={8} display={toggleTodo && 'none'}>Hey... if you wish to check my todo, <br/> click the button below!</Heading>
+        <Button bg="purple.400" py={2} px={4} _hover={{ background: "purple.600" }} w={60} h={14} rounded="md" color="#fff" onClick={showTodo} display={toggleTodo && 'none'}>
+        Show Todo
+      </Button>
+      </Flex>
+    </Box>
+
   );
 }
 
